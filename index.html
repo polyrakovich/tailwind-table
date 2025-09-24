@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="src/style.css" rel="stylesheet" type="text/css">
+    <title>Table</title>
+  </head>
+  <body class="absolute w-full">
+  <div class="container relative w-full px-4 m-auto">
+    <div id="preloader" class="fixed top-0 button-0 left-0 right-0 flex justify-center items-center w-full h-full bg-white z-50">
+      <div id="spinner" class="animate-spin inline-block size-6 border-3 border-current border-t-transparent text-blue-500 rounded-full dark:text-blue-500" role="status" aria-label="loading">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+
+    <div class="tableContainer w-full">
+      <!-- Поиск по таблице -->
+      <div class="searchInputContainer flex my-6">
+        <input id="searchInput"
+               class="mx-4 h-8 py-0.5 px-2 block w-2/5 rounded-lg shadow-sm border-1 border-gray-500">
+        <button type="button" class="px-6 h-auto bg-blue-500 text-white rounded-lg  cursor-pointer" id="searchButton">Filter</button>
+      </div>
+      <div class=" rounded-lg border-t-4 border-gray-500">
+        <table class=" w-full table-auto text-left border-collapse border-solid">
+          <thead>
+          <tr class="h-11 border-solid border-b border-gray-500">
+            <th class="p-2">
+              <p class="text-sm leading-none font-semibold">
+                Name
+              </p>
+            </th>
+            <th class="p-2">
+              <p class="text-sm leading-none font-semibold">
+                Phone number
+              </p>
+            </th>
+            <th class="p-2">
+              <p class="text-sm leading-none font-semibold">
+                Website
+              </p>
+            </th>
+            <th class="p-2">
+              <p class="text-sm leading-none font-semibold">
+                Company
+              </p>
+            </th>
+            <th class="p-2">
+              <p class="text-sm leading-none font-semibold">
+                Actions
+              </p>
+            </th>
+          </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div id="modal"
+             class="fixed inset-0 flex items-center justify-center z-50 hidden">
+          <div class="bg-white rounded-lg shadow-lg py-6 px-8 ">
+            <!--Заголовок модального окна-->
+            <div id="modalHeader" class="mb-4 flex justify-between items-center">
+              <h5 class="text-lg font-semibold">
+                Add new row
+              </h5>
+              <button type="button" id="closingBtn" class=" cursor-pointer">
+                <svg width="15" height="15" viewBox="0 0 20 20" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color"><path style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2" d="M19 19 5 5"/><path data-name="primary" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2" d="M19 5 5 19"/></svg>
+              </button>
+            </div>
+            <!--onsubmit-->
+            <form id="form"
+                  novalidate>
+
+              <label for="name" class="min-w-64 block text-sm font-medium text-gray-700">
+                Name
+                <input type="text"
+                       id="name"
+                       name="name"
+                       placeholder="John Doe"
+                       pattern="[a-zA-Z\s\-\.]{1,30}$"
+                       required
+                       class="formInput border-1 mt-2 h-8 py-0.5 px-2 block w-full border-gray-300 rounded-lg shadow-sm">
+              </label>
+              <div class="small m-1 h-5">
+                <small
+                        aria-live="polite"
+                        class="formError nameError"
+                        id="nameError">
+                </small>
+              </div>
+
+              <label for="email" class="min-w-64 block text-sm font-medium text-gray-700">
+                E-mail
+                <input type="email"
+                       id="email"
+                       name="email"
+                       placeholder="example@email.com"
+                       required
+                       class="formInput border-1 mt-2 h-8 py-0.5 px-2 block w-full border-gray-300 rounded-lg shadow-sm">
+              </label>
+
+              <div class="small m-1 h-5">
+                <small
+                        aria-live="polite"
+                        class="formError emailError"
+                        id="emailError">
+                </small>
+              </div>
+
+              <label for="phone" class="min-w-64 block text-sm font-medium text-gray-700">
+                Phone number
+                <input type="text"
+                       id="phone"
+                       name="phone"
+                       placeholder="xxx-xxx-xxxx"
+                       pattern="[\d\-x\s\(\)\.]*"
+                       required
+                       class="formInput border-1 mt-2 h-8 py-0.5 px-2 block w-full border-gray-300 rounded-lg shadow-sm">
+              </label>
+              <div class="small m-1 h-5">
+                <small
+                        aria-live="polite"
+                        class="formError phoneError"
+                        id="phoneError">
+                </small>
+              </div>
+
+              <label for="website" class="min-w-64 block text-sm font-medium text-gray-700">
+                Website
+                <input type="text"
+                       id="website"
+                       name="website"
+                       placeholder="example.com"
+                       pattern="([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}"
+                       required
+                       class="formInput mt-2 h-8 py-0.5 px-2 block w-full rounded-lg shadow-sm border-1 border-gray-300">
+              </label>
+              <div class="small m-1 h-5">
+                <small
+                        aria-live="polite"
+                        class="formError websiteError"
+                        id="websiteError">
+                </small>
+              </div>
+
+              <label for="company" class="min-w-64 block text-sm font-medium text-gray-700">
+                Company
+                <select id="company"
+                        name="company"
+                        class="formSelect border-1 mt-2 h-8 py-0.5 px-2 block w-full border-gray-300 rounded-lg shadow-sm"
+                        required>
+                  <option value="Albernathy Group" class="overflow-y-scroll" selected>Albernathy Group</option>
+                  <option value="Considine-Lockman" class="overflow-y-scroll">Considine&ndash;Lockman</option>
+                  <option value="Deckow-Crist" class="overflow-y-scroll">Deckow&ndash;Crist</option>
+                  <option value="Hoeger LLC" class="overflow-y-scroll">Hoeger LLC</option>
+                  <option value="Johns Group" class="overflow-y-scroll">Johns Group</option>
+                  <option value="Keebler LLC" class="overflow-y-scroll">Keebler LLC</option>
+                  <option value="Robel-Cockery" class="overflow-y-scroll">Robel&ndash;Cockery</option>
+                  <option value="Romaguera-Crona" class="overflow-y-scroll">Romaguera&ndash;Crona</option>
+                  <option value="Robel-Cockery" class="overflow-y-scroll">Romaguera&ndash;Jacobson</option>
+                  <option value="Yost and Sons" class="overflow-y-scroll">Yost and Sons</option>
+
+                </select>
+              </label>
+              <div class="small m-1 h-5">
+              </div>
+              <div class="flex gap-2 justify-between items-center">
+                <label class="fileUpload block w-auto py-1 px-2 h-8 text-sm font-medium bg-blue-500 text-white rounded-lg cursor-pointer">
+                  <span>Add user&apos;s picture</span>
+                  <input type="file"
+                         name="avatar"
+                         id="avatar"
+                         accept="image/*"
+                         class="mt-2 h-8 py-0.5 px-2 w-full rounded-lg shadow-sm border-1 border-gray-300 cursor-pointer hidden"
+                  >
+
+                </label>
+                <button id="removingButton" type="button" class="w-1/3 text-xs cursor-pointer text-red-600 underline hidden">Remove picture</button>
+              </div>
+              <div class="flex justify-end">
+                <button id="addingBtn" type="submit" class="bg-blue-500 text-white py-2 px-4 mt-6 rounded-lg  cursor-pointer">
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!--Модальное окно для редактирования строк-->
+        <div id="editingModal"
+             class="fixed inset-0 flex items-center justify-center z-50 hidden">
+          <div class="bg-white rounded-lg shadow-lg py-6 px-8 ">
+            <!--Заголовок модального окна-->
+            <div id="editingFormModalHeader" class="mb-4 flex justify-between items-center">
+              <h5 class="text-lg font-semibold">
+                Edit row
+              </h5>
+              <button type="button" id="editingFormClosingBtn" class=" cursor-pointer">
+                <svg width="15" height="15" viewBox="0 0 20 20" data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color"><path style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2" d="M19 19 5 5"/><path data-name="primary" style="fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2" d="M19 5 5 19"/></svg>
+              </button>
+            </div>
+            <!--onsubmit-->
+            <form id="editingForm"
+                  novalidate>
+
+              <label for="editingFormName" class="min-w-64 block text-sm font-medium text-gray-700">
+                Name
+                <input type="text"
+                       id="editingFormName"
+                       name="name"
+                       pattern="[a-zA-Z\s\-\.]{1,30}$"
+                       required
+                       class="editingModalInput border-1 mt-2 h-8 py-0.5 px-2 block w-full border-gray-300 rounded-lg shadow-sm">
+              </label>
+              <div class="small m-1 h-5">
+                <small
+                        aria-live="polite"
+                        class="editingFormError editingFormNameError"
+                        id="editingFormNameError">
+                </small>
+              </div>
+
+              <label for="editingFormEmail" class="min-w-64 block text-sm font-medium text-gray-700">
+                E-mail
+                <input type="email"
+                       id="editingFormEmail"
+                       name="email"
+                       required
+                       class="editingModalInput border-1 mt-2 h-8 py-0.5 px-2 block w-full border-gray-300 rounded-lg shadow-sm">
+              </label>
+
+              <div class="small m-1 h-5">
+                <small
+                        aria-live="polite"
+                        class="editingFormError editingFormEmailError"
+                        id="editingFormEmailError">
+                </small>
+              </div>
+
+              <label for="editingFormPhone" class="min-w-64 block text-sm font-medium text-gray-700">
+                Phone number
+                <input type="text"
+                       id="editingFormPhone"
+                       name="phone"
+                       pattern="[\d\-x\s\(\)\.]*"
+                       required
+                       class="editingModalInput border-1 mt-2 h-8 py-0.5 px-2 block w-full border-gray-300 rounded-lg shadow-sm">
+              </label>
+              <div class="small m-1 h-5">
+                <small
+                        aria-live="polite"
+                        class="editingFormError editingFormPhoneError"
+                        id="editingFormPhoneError">
+                </small>
+              </div>
+
+              <label for="editingFormWebsite" class="min-w-64 block text-sm font-medium text-gray-700">
+                Website
+                <input type="text"
+                       id="editingFormWebsite"
+                       name="website"
+                       pattern="([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}"
+                       required
+                       class="editingModalInput mt-2 h-8 py-0.5 px-2 block w-full rounded-lg shadow-sm border-1 border-gray-300">
+              </label>
+              <div class="small m-1 h-5">
+                <small
+                        aria-live="polite"
+                        class="editingFormError editingFormWebsiteError"
+                        id="editingFormWebsiteError">
+                </small>
+              </div>
+
+              <label for="editingFormCompany" class="min-w-64 block text-sm font-medium text-gray-700">
+                Company
+                <select id="editingFormCompany"
+                        name="company"
+                        class="editingFormSelect border-1 mt-2 h-8 py-0.5 px-2 block w-full border-gray-300 rounded-lg shadow-sm"
+                        required>
+                  <option value="Albernathy Group" class="overflow-y-scroll" selected>Albernathy Group</option>
+                  <option value="Considine-Lockman" class="overflow-y-scroll">Considine&ndash;Lockman</option>
+                  <option value="Deckow-Crist" class="overflow-y-scroll">Deckow&ndash;Crist</option>
+                  <option value="Hoeger LLC" class="overflow-y-scroll">Hoeger LLC</option>
+                  <option value="Johns Group" class="overflow-y-scroll">Johns Group</option>
+                  <option value="Keebler LLC" class="overflow-y-scroll">Keebler LLC</option>
+                  <option value="Robel-Cockery" class="overflow-y-scroll">Robel&ndash;Cockery</option>
+                  <option value="Romaguera-Crona" class="overflow-y-scroll">Romaguera&ndash;Crona</option>
+                  <option value="Robel-Cockery" class="overflow-y-scroll">Romaguera&ndash;Jacobson</option>
+                  <option value="Yost and Sons" class="overflow-y-scroll">Yost and Sons</option>
+
+                </select>
+              </label>
+              <div class="small m-1 h-5">
+              </div>
+              <div class="flex gap-2 justify-between items-center">
+                <label class="fileUpload w-fit block py-1 px-2 h-8 text-sm font-medium bg-blue-500 text-white rounded-lg cursor-pointer">
+                  <span>Change user&apos;s picture</span>
+                  <input type="file"
+                         name="avatar"
+                         id="editingFormAvatar"
+                         accept="image/*"
+                         class="mt-2 h-8 py-0.5 px-2 w-full rounded-lg shadow-sm border-1 border-gray-300 cursor-pointer hidden">
+
+                </label>
+                <button id="editingFormRemovingButton" type="button" class="w-1/3 text-xs cursor-pointer text-red-600 underline hidden">Remove picture</button>
+
+              </div>
+              <div class="flex justify-end">
+                <button id="editingFormBtn" type="submit" class="bg-orange-500 text-white py-2 px-4 mt-6 rounded-lg  cursor-pointer">
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- Фоновая затемненная область -->
+        <div id="modalBackdrop" class="fixed inset-0 bg-black opacity-50 hidden"></div>
+      </div>
+      <!-- Кнопка для открытия модального окна -->
+      <button type="button" class="my-6 mx-4 bg-blue-500 text-white py-2 px-4 rounded-lg  cursor-pointer" id="modalBtn">
+        Add new row
+      </button>
+    </div>
+
+    <script src="script.js"></script>
+  </div>
+  </body>
+</html>
